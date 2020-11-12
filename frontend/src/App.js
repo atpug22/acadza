@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useEffect } from 'react';
 import socketIOClient from "socket.io-client";
-import Chart, { ApexCharts } from 'react-apexcharts'
 const ENDPOINT = "http://localhost:1978";
 
 
@@ -9,8 +8,7 @@ const usdArr = [];
 const gbpArr = [];
 const eurArr = [];
 const jpyArr = [];
-var data = []
-var j = 0
+
 
 function App() {
 
@@ -21,25 +19,8 @@ function App() {
     });
   }, []);
 
-  var options = {
-    chart: {
-      type: 'line'
-    },
-    series: [{
-      data: data
-    }],
-    xaxis: {
-      type: 'categories'
-    }
-  }
 
-  useEffect(() => {
-    window.setInterval(() => {
-      ApexCharts.exec('realtime', 'updateSeries', [{
-        data: data
-      }])
-    }, 1000)
-  }, []);
+  
 
 
 
@@ -63,12 +44,7 @@ function App() {
           </tbody>
         </table>
         <div id="tickertape" class="ticker-tape"></div>
-        <Chart
-          options={options}
-          series={options.series}
-          type="line"
-          width="500"
-        />
+        
       </section>
     </div>
   );
@@ -108,11 +84,6 @@ function refreshTicker(tickerdata) {
     cell3.innerHTML = item.volume;
     cell4.innerHTML = item.change;
     cell5.innerHTML = '<span id="sparkline-' + item.target + '"></span>';
-    const date = new Date();
-    if (item.target == "USD") {
-      data.push({ x: date.getTime(), y: item.price });
-      console.log(data)
-    }
     rowCnt++;
   });
   console.log(tickerdata);
